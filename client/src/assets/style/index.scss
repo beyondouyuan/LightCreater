@@ -1,0 +1,19 @@
+/*
+* @Author: beyondouyuan
+* @Date:   2018-12-10 13:47:30
+* @Last Modified by:   beyondouyuan
+* @Last Modified time: 2019-01-22 22:56:41
+*/
+
+@import './reset.scss';
+
+.layout-container {
+	width: 100%;
+	height: 100%;
+  overflow-y: scroll;
+}
+.content-container {
+	width: 100%;
+  height: 100%;
+	margin: 0 auto;
+}
