@@ -2,7 +2,7 @@
  * @Author: beyondouyuan
  * @Date:   2019-01-24 12:40:01
  * @Last Modified by:   beyondouyuan
- * @Last Modified time: 2019-01-24 14:04:06
+ * @Last Modified time: 2019-02-15 01:20:40
  * @E-mail: beyondouyuan@gmail.com
  * @Github: https://beyondouyuan.github.io/
  * @description: 写代码就像写诗一样
@@ -12,11 +12,14 @@
 import fs from 'fs'
 import shortid from 'shortid'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+
 import {
   renderApiData,
   renderApiError,
   getClientIP
 } from '../utils'
+import config from '../config'
 import UserSchema from '../models/User'
 // 加密等级
 const passLevel = 10
@@ -26,14 +29,15 @@ export default {
     const {
       body: fields
     } = req
+    console.log(fields)
     const obj = {
       username: fields.username,
       nickname: fields.nickname,
       email: fields.email,
       password: fields.password,
-      role: fields.role,
+      role: fields.role || 'member',
       phone: fields.phone,
-      enable: fields.enable ? true : false
+      enable: true
     }
 
     try {
@@ -48,7 +52,7 @@ export default {
           id: userObj._id
         }))
       } else {
-        return res.send(renderApiError(req, res, 500, '秘密啊加密出错'))
+        return res.send(renderApiError(req, res, 500, '密码加密出错'))
       }
     } catch (err) {
       return res.send(renderApiError(req, res, 500, err))
@@ -131,21 +135,23 @@ export default {
         if (!hashPassword) {
           return res.send(renderApiError(req, res, 401, '用户名或密码错误'))
         }
-
-        req.session.userLogined = true,
-          req.session.userInfo = {
-            username: user.username,
-            id: user._id,
-            email: user.email,
-            nickname: user.nickname,
-            role: user.role,
-            avatar: user.avatar
-          }
-        req.session.save()
         const ip = getClientIP(req)
         user.last_login_ip = ip
         user.last_login_time = Date.now()
-        return res.send(renderApiData(req, res, 200, '登陆成功'))
+        const token = jwt.sign({
+          _id: user._id
+        }, config.secret, {
+          expiresIn: 60 * 60 * 5
+        })
+        const result = {
+          username: user.username,
+          email: user.email,
+          nickname: user.nickname,
+          role: user.role,
+          avatar: user.avatar,
+          token
+        }
+        return res.send(renderApiData(req, res, 200, '登陆成功', result))
       } else {
         return res.send(renderApiError(req, res, 404, '账号不存在'))
       }
@@ -154,9 +160,6 @@ export default {
     }
   },
   async logout(req, res, next) {
-    delete req.session.userLogined
-    delete req.session.userInfo
-
     return res.send(renderApiData(req, res, 200, '登出成功'))
   }
 }

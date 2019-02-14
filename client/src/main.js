@@ -9,6 +9,9 @@ import './assets/style/index.scss'
 import store from '@/store'
 
 import * as filters from './filters'
+
+import './permission' // 权限菜单
+
 Object.keys(filters).forEach(key => {
 	Vue.filter(key, filters[key])
 })

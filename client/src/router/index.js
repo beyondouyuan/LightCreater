@@ -57,5 +57,21 @@ export default new Router({
 				title: '制作单页应用'
 			}
 		}]
+	}, {
+		path: '/login',
+			name: 'Login',
+			title: '登陆',
+			component: resolve => require.ensure([], () => resolve(require('@/views/User/Login')), 'Login'),
+			meta: {
+				title: '登陆'
+			}
+	}, {
+		path: '/register',
+			name: 'Register',
+			title: '登陆',
+			component: resolve => require.ensure([], () => resolve(require('@/views/User/Register')), 'Register'),
+			meta: {
+				title: '注册'
+			}
 	}]
 })

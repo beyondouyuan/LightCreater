@@ -2,7 +2,7 @@
  * @Author: beyondouyuan
  * @Date:   2019-01-22 14:51:59
  * @Last Modified by:   beyondouyuan
- * @Last Modified time: 2019-02-14 22:52:42
+ * @Last Modified time: 2019-02-15 01:55:33
  */
 
 import request from '@/utils/request'
@@ -86,7 +86,31 @@ export const requestThemePictureList = params => {
 }
 
 
+export const requestUserLogin = data => {
+  return request({
+      url: parseAPI('login'),
+      method: 'POST',
+      data
+    })
+    .then(res => res.data)
+}
 
+export const requestUserRegister = data => {
+  return request({
+      url: parseAPI('register'),
+      method: 'POST',
+      data
+    })
+    .then(res => res.data)
+}
+
+export const requestUserLogout = () => {
+  return request({
+      url: parseAPI('logout'),
+      method: 'POST'
+    })
+    .then(res => res.data)
+}
 
 function formatParams(data) {
     const arr = []

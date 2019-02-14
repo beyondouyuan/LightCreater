@@ -42,10 +42,11 @@
 		path: '/user',
 		active: false
 	}]
+	import { requestUserLogout } from '@/api'
 	export default {
 		data() {
 			return {
-				userName: 'ouyuan',
+				userName: this.$store.state.user.userInfo.nickname || 'admin',
 				navList
 			}
 		},
@@ -57,7 +58,24 @@
 				this.$router.push(item)
 			},
 			handleLogout() {
-
+				requestUserLogout()
+				.then(res => {
+					const {
+						code,
+						message
+					} = res
+					if (code === 200) {
+            this.$notify({
+              title: '成功',
+              message: message,
+              type: 'success'
+            })
+            this.$store.dispatch('userInfoAction', {})
+            setTimeout(() => {
+              location.href = '/login'
+            }, 300)
+          }
+				})
 			}
 		}
 	}

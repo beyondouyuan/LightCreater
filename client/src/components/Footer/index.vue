@@ -1,8 +1,8 @@
 <template>
     <section class="footer-container">
         <footer class="footer-box">
-            wow-creater
-            <p>Copyright © {{Date.now() | parseTime('{y}')}} wow-creater 版权所有 Powered by wow-creater</p>
+            LightCreater
+            <p>Copyright © {{Date.now() | parseTime('{y}')}} LightCreater 版权所有 Powered by LightCreater</p>
         </footer>
     </section>
 </template>
